@@ -1,6 +1,7 @@
 import os
 import uuid
 from flask import Flask, request, jsonify
+
 from azure.storage.blob import BlobServiceClient
 from azure.cognitiveservices.vision.customvision.prediction import CustomVisionPredictionClient
 from msrest.authentication import ApiKeyCredentials
@@ -12,12 +13,12 @@ app = Flask(__name__)
 
 
 # Configuration pour Azure Blob Storage
-blob_connection_string = "DefaultEndpointsProtocol=https;AccountName=bloblinguistique;AccountKey=COAUxu7GXT7e4y7bLIBHxuPM5QzN5nZSuK/FVVUAFPcwcR53il7te3YeFTX96iimhpWLDH7FYoRw+AStUJUuOA==;EndpointSuffix=core.windows.net"
+blob_connection_string = os.getenv("AZURE_BLOB_CONNECTION_STRING")
 blob_service_client = BlobServiceClient.from_connection_string(blob_connection_string)
 container_name = "bloblinguistique"
 
 # Configuration pour Azure Custom Vision
-prediction_key = "3hjXBcZ32pdpz78ElTNH1eHcaXVn2WvFOoUD3HdjZSI8OfYXS9AyJQQJ99ALAC5RqLJXJ3w3AAAJACOGVSB0"
+prediction_key = os.getenv("CUSTOM_VISION_PREDICTION_KEY")
 endpoint = "https://customvisionprojetlinguistique.cognitiveservices.azure.com/"
 project_id = "55ea68cc-53af-4710-9664-e208dd4384e9"
 publish_iteration_name = "publish_iteration_name"
@@ -26,7 +27,7 @@ publish_iteration_name = "publish_iteration_name"
 sql_server = "appli-linguistique-sql.database.windows.net"
 database = "appliLinguistiqueDB"
 username = "sqladmin"
-password = "Meryemsarahoussam1234"
+password = os.getenv("SQL_PASSWORD")
 driver = "{ODBC Driver 17 for SQL Server}"
 
 # Connexion à la base de données

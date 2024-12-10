@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Linguistique</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Application d'Apprentissage Linguistique</h1>
+        </header>
+        
+        <main class="main-content">
+            <p>Bienvenue dans votre plateforme interactive pour apprendre tout en s'amusant !</p>
+            <script src="{{ url_for('static', filename='script.js') }}"></script>
+            <div class="buttons">
+                <a href="/register" class="btn btn-primary">S'inscrire</a>
+                <a href="/login" class="btn btn-secondary">Se connecter</a>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>&copy; 2024 Application Linguistique. Tous droits réservés.</p>
+        </footer>
+    </div>
+</body>
+</html>
