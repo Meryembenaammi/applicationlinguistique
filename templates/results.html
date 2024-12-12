@@ -3,13 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Résultats</title>
+    <title>Résultats du Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <header>
-        <h1>Résultats du Quiz</h1>
-    </header>
-    <p>Vous avez obtenu <span id="score">80%</span> de bonnes réponses !</p>
-    <button onclick="window.location.href='dashboard.html'">Retour au Dashboard</button>
+    <div class="container">
+        <header>
+            <h1>Résultats du Quiz</h1>
+        </header>
+
+        <main>
+            <section class="score-section">
+                <h2>Votre score : <span class="score">{{ score }}%</span></h2>
+                <p>Félicitations pour avoir terminé le quiz !</p>
+            </section>
+
+            <section class="button-section">
+                <a href="{{ url_for('quiz_list') }}" class="btn btn-primary">Retour à la liste des quizs</a>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Application Linguistique</p>
+        </footer>
+    </div>
 </body>
 </html>
