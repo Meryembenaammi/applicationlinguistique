@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Application Linguistique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Application d'Apprentissage Linguistique</h1>
+        </header>
+
+        <main class="main-content">
+            <h2>S'inscrire</h2>
+
+            <!-- Formulaire d'inscription -->
+            <form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <label for="email">Email :</label>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <label for="profile_picture">Photo de profil :</label>
+                <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required><br><br>
+
+                <button type="submit" class="btn btn-primary">S'inscrire</button>
+            </form>
+
+            <!-- Lien pour revenir à la page de connexion -->
+            <div class="login-link">
+                <a href="{{ url_for('login') }}">Retour à la connexion</a>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Application Linguistique. Tous droits réservés.</p>
+        </footer>
+    </div>
+</body>
+</html>
