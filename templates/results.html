@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Résultats du Quiz</title>
+<<<<<<< HEAD
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,6 +56,30 @@
         <h1>Résultats du Quiz</h1>
         <p>Votre score est : <span style="font-weight: bold; color: #4CAF50;">{{ score }}%</span></p>
         <a href="{{ url_for('quiz_list') }}">Retour à la liste des quizs</a>
+=======
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Résultats du Quiz</h1>
+        </header>
+
+        <main>
+            <section class="score-section">
+                <h2>Votre score : <span class="score">{{ score }}%</span></h2>
+                <p>Félicitations pour avoir terminé le quiz !</p>
+            </section>
+
+            <section class="button-section">
+                <a href="{{ url_for('quiz_list') }}" class="btn btn-primary">Retour à la liste des quizs</a>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Application Linguistique</p>
+        </footer>
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
     </div>
 </body>
 </html>

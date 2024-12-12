@@ -6,6 +6,7 @@ from azure.cognitiveservices.vision.customvision.prediction import CustomVisionP
 from msrest.authentication import ApiKeyCredentials
 import pyodbc
 import requests
+<<<<<<< HEAD
 
 from flask import session
 import secrets  # Ajoutez cette ligne pour l'importation de secrets
@@ -17,6 +18,11 @@ print(secret_key)  # Optionnel, pour afficher la clé générée dans la console
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.secret_key = secret_key  # Attribuez la clé secrète à l'application Flask
 
+=======
+from flask import session
+app = Flask(__name__, static_folder='static', template_folder='templates')
+
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
 # --- Clés et configurations ---
 # Configuration pour Azure Blob Storage
 blob_connection_string = "DefaultEndpointsProtocol=https;AccountName=bloblinguistique;AccountKey=COAUxu7GXT7e4y7bLIBHxuPM5QzN5nZSuK/FVVUAFPcwcR53il7te3YeFTX96iimhpWLDH7FYoRw+AStUJUuOA==;EndpointSuffix=core.windows.net"
@@ -66,7 +72,10 @@ def login():
             # Vérification si l'utilisateur existe et si le mot de passe correspond
             if user and user[3] == password:  # 3 correspond à l'indice de 'PasswordHash'
                 print(f"User {username} logged in successfully")
+<<<<<<< HEAD
                 session['user_id'] = user[0]  # Stocker l'ID de l'utilisateur dans la session
+=======
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
                 return redirect(url_for('dashboard'))  # Rediriger vers le tableau de bord si les informations sont correctes
             else:
                 return render_template('login.html', error="Nom d'utilisateur ou mot de passe incorrect.")
@@ -81,6 +90,7 @@ def index():
 
 @app.route('/dashboard')
 def dashboard():
+<<<<<<< HEAD
     user_id = session.get('user_id')  # Récupérer l'ID de l'utilisateur connecté
     if not user_id:
         return redirect(url_for('login'))  # Si l'utilisateur n'est pas connecté, rediriger vers la connexion
@@ -192,10 +202,105 @@ def submit_quiz(quiz_id):
     # Enregistrer les résultats dans la base de données si l'utilisateur est connecté
     if user_id:
         cursor = conn.cursor()
+=======
+    user_id = 1  # Remplacez cela par l'ID réel de l'utilisateur
+
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        # Récupérer les résultats de tous les quiz de l'utilisateur
+        cursor.execute("""
+            SELECT Quizzes.Title, QuizResults.Score
+            FROM QuizResults
+            JOIN Quizzes ON QuizResults.QuizId = Quizzes.QuizId
+            WHERE QuizResults.UserId = ?
+        """, (user_id,))
+        results = cursor.fetchall()  # Récupérer les résultats sous forme de tuple
+        cursor.close()
+
+        # Calculer le score total de l'utilisateur
+        total_score = calculate_total_score(results)
+
+        return render_template('dashboard.html', results=results, total_score=total_score)
+    else:
+        return render_template('dashboard.html', error="Erreur de connexion à la base de données.")
+
+
+def calculate_total_score(results):
+    total_score = 0
+    total_quizzes = len(results)
+
+    if total_quizzes > 0:
+        for result in results:
+            total_score += result[1]  # L'indice 1 correspond à "Score"
+        
+        # Arrondir à 2 décimales
+        return round(total_score / total_quizzes, 2)
+    else:
+        return 0
+
+
+
+
+@app.route('/quiz-list')
+def quiz_list():
+    # Connexion à la base de données et récupération des quizs
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM Quizzes")  # Récupère tous les quizs
+        quizzes = cursor.fetchall()  # Récupère toutes les lignes de résultats
+        cursor.close()
+        return render_template('quiz_list.html', quizzes=quizzes)  # Passer les quizs à la template
+    else:
+        return render_template('quiz_list.html', error="Erreur de connexion à la base de données.")
+
+
+
+
+@app.route('/quiz/<int:quiz_id>', methods=['GET'])
+def quiz(quiz_id):
+    # Connexion à la base de données et récupération des questions pour le quiz spécifique
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM QuizQuestions WHERE QuizId = ?", (quiz_id,))
+        questions = cursor.fetchall()
+        cursor.execute("SELECT * FROM Quizzes WHERE QuizId = ?", (quiz_id,))
+        quiz = cursor.fetchone()  # Récupère les informations du quiz
+        cursor.close()
+        return render_template('quiz.html', questions=questions, quiz=quiz)  # Passer les questions et le quiz à la template
+    else:
+        return render_template('quiz.html', error="Erreur de connexion à la base de données.")
+@app.route('/submit-quiz/<int:quiz_id>', methods=['POST'])
+def submit_quiz(quiz_id):
+    # Récupérer les réponses de l'utilisateur
+    user_id = 1  # Remplacer par l'ID réel de l'utilisateur
+    correct_answers = 0
+
+    conn = get_db_connection()
+    if conn:
+        cursor = conn.cursor()
+        # Récupérer les bonnes réponses pour les questions du quiz
+        cursor.execute("SELECT * FROM QuizQuestions WHERE QuizId = ?", (quiz_id,))
+        questions = cursor.fetchall()
+
+        # Vérifier les réponses de l'utilisateur
+        for question in questions:
+            user_answer = request.form.get(f'question_{question.QuestionId}')
+            if user_answer == question.CorrectAnswer:
+                correct_answers += 1
+
+        total_questions = len(questions)
+        score = (correct_answers / total_questions) * 100
+
+        # Enregistrer les résultats dans la table QuizResults
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
         cursor.execute("""
             INSERT INTO QuizResults (UserId, QuizId, CorrectAnswers, TotalQuestions, Score)
             VALUES (?, ?, ?, ?, ?)
         """, (user_id, quiz_id, correct_answers, total_questions, score))
+<<<<<<< HEAD
         conn.commit()
 
     return redirect(url_for('results', quiz_id=quiz_id, score=score))
@@ -223,6 +328,22 @@ def results(quiz_id, score):
 
 
 
+=======
+
+        conn.commit()
+        cursor.close()
+
+        return redirect(url_for('results', quiz_id=quiz_id, score=score))
+
+    else:
+        return render_template('quiz.html', error="Erreur de connexion à la base de données.")
+
+
+@app.route('/results', methods=['GET'])
+def results():
+    score = request.args.get('score')
+    return render_template('results.html', score=score)
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
 
 
 @app.route('/logout')
@@ -312,11 +433,15 @@ def save_user_to_db(username, email, password, predicted_gender):
     if conn:
         cursor = conn.cursor()
         try:
+<<<<<<< HEAD
             # Insérer l'utilisateur dans la table Users
+=======
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
             cursor.execute("""
                 INSERT INTO Users (UserName, Email, PasswordHash, PredictedGender)
                 VALUES (?, ?, ?, ?)
             """, (username, email, password, predicted_gender))
+<<<<<<< HEAD
             conn.commit()  # Sauvegarder l'utilisateur
             
             # Récupérer l'ID de l'utilisateur nouvellement ajouté
@@ -340,5 +465,18 @@ def save_user_to_db(username, email, password, predicted_gender):
 
 
 
+=======
+            conn.commit()  # Sauvegarder les modifications
+            print(f"User {username} registered successfully with gender {predicted_gender}")
+        except Exception as e:
+            print(f"Error while saving user: {e}")
+        finally:
+            cursor.close()
+            conn.close()
+    else:
+        print("Failed to save user due to database connection error.")
+
+
+>>>>>>> 5b3fcfc11f53f0f280b8e23e9552e91e0e25c611
 if __name__ == '__main__':
     app.run(debug=True)
