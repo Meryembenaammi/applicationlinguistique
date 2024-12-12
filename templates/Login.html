@@ -3,27 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Linguistique</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Connexion - Application Linguistique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <header class="header">
             <h1>Application d'Apprentissage Linguistique</h1>
         </header>
-        
+
         <main class="main-content">
-            <p>Bienvenue dans votre plateforme interactive pour apprendre tout en s'amusant !</p>
-            <script src="{{ url_for('static', filename='script.js') }}"></script>
-            <div class="buttons">
-                <a href="/register" class="btn btn-primary">S'inscrire</a>
-                <a href="/login" class="btn btn-secondary">Se connecter</a>
+            <h2>Se connecter</h2>
+
+            <!-- Formulaire de connexion -->
+            <form action="{{ url_for('login') }}" method="POST">
+                <label for="username">Nom d'utilisateur :</label>
+                <input type="text" id="username" name="username" required><br><br>
+
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="password" name="password" required><br><br>
+
+                <button type="submit" class="btn btn-primary">Se connecter</button>
+            </form>
+
+            <!-- Lien pour revenir à l'inscription -->
+            <div class="register-link">
+                <a href="{{ url_for('register') }}">Pas encore inscrit ? S'inscrire</a>
             </div>
         </main>
-        
+
         <footer class="footer">
             <p>&copy; 2024 Application Linguistique. Tous droits réservés.</p>
         </footer>
     </div>
 </body>
 </html>
+
