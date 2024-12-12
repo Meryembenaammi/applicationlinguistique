@@ -3,15 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Quiz</title>
+    <title>Liste des Quizs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Style de base */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #2c3e50;
+            font-size: 36px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #27ae60; /* Vert */
+            color: #fff;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .quiz-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #27ae60; /* Vert */
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2ecc71; /* Vert plus clair */
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        footer a {
+            background-color: #2ecc71; /* Vert */
+            padding: 10px 20px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        footer a:hover {
+            background-color: #27ae60; /* Vert plus foncé */
+        }
+
+        @media (max-width: 768px) {
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .quiz-image {
+                width: 60px;
+                height: 60px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Sélectionner un Quiz</h1>
-    </header>
-    <ul>
-        <li><a href="quiz.html?quizId=1">Vocabulaire Anglais (Questions textuelles)</a></li>
-        <li><a href="quiz.html?quizId=2">Identifie les fruits (Questions avec images)</a></li>
-    </ul>
+
+    <div class="container">
+        <header>
+            <h1>Liste des Quizs</h1>
+        </header>
+
+        <main>
+            <table class="quiz-table">
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td>{{ quiz.Title }}</td>
+                        <td>{{ quiz.Description }}</td>
+                        <td><img src="{{ quiz.ImageUrl }}" alt="{{ quiz.Title }}" class="quiz-image"></td>
+                        <td><a href="{{ url_for('quiz', quiz_id=quiz.QuizId) }}" class="btn">Commencer le quiz</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
+
+        <footer>
+            <a href="{{ url_for('dashboard') }}" class="btn">Retour au tableau de bord</a>
+        </footer>
+    </div>
+
 </body>
 </html>
